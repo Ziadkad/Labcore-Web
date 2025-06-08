@@ -1,0 +1,36 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="mb-6">
+    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Email address</label>
+    <input
+    type="email"
+    id="email"
+    formControlName="email"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+    placeholder="john.doe@company.com"/>
+    <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" class="text-sm text-status-pending mt-1">
+      <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
+      <span *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</span>
+    </div>
+  </div>
+  <div class="mb-6">
+    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+    <input
+      type="password"
+      id="password"
+      formControlName="password"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+      placeholder="•••••••••"
+    />
+    <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="text-sm text-status-pending mt-1">
+      <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</span>
+      <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters.</span>
+    </div>
+  </div>
+  <button
+    type="submit"
+    [disabled]="isSubmitting"
+    class="text-white bg-accent hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+  >
+    {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+  </button>
+</form>
