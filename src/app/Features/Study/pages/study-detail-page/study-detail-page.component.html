@@ -1,0 +1,147 @@
+<div class="max-w-6xl mx-auto p-6">
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="text-center text-gray-500">Loading study...</div>
+
+  <!-- Study Info -->
+  <div *ngIf="study">
+
+    <!-- Title -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ study.title }}</h1>
+
+    <!-- Info Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">Start Date:</span>
+        <span>{{ study.startDate | date }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">End Date:</span>
+        <span>{{ study.endDate | date }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">Risk Level:</span>
+        <span>{{ study.riskLevel }}</span>
+      </div>
+    </div>
+
+    <!-- Objective -->
+    <div class="mt-6">
+      <h2 class="font-semibold text-gray-800">Objective</h2>
+      <p class="text-gray-600 mt-1">{{ study.objective }}</p>
+    </div>
+
+    <!-- Description -->
+    <div class="mt-6">
+      <h2 class="font-semibold text-gray-800">Description</h2>
+      <p class="text-gray-600 mt-1" [innerHTML]="study.description"></p>
+    </div>
+
+    <!-- Files Section -->
+    <div *ngIf="study.pathsFiles?.length" class="mt-10">
+      <span class="font-semibold">Study Files</span>
+      <div class="space-y-3 mt-4">
+        <div *ngFor="let fileLink of study.pathsFiles" class="flex items-center justify-between group px-2 py-1">
+          <div class="flex items-center space-x-3">
+            <i class="fa fa-file-alt text-gray-500 group-hover:text-primary transition"></i>
+            <span class="text-gray-700 group-hover:text-primary transition">
+              {{ getCleanFileName(fileLink) }}
+            </span>
+          </div>
+          <div class="flex space-x-4">
+            <button (click)="downloadStudyFile(fileLink)"
+                    class="text-sm text-primary hover:underline focus:outline-none flex items-center space-x-1">
+              <i class="fa fa-download"></i>
+              <span>Download</span>
+            </button>
+            <button (click)="deleteProjectFile(fileLink)"
+                    class="text-sm text-red-600 hover:underline focus:outline-none flex items-center space-x-1">
+              <i class="fa fa-trash"></i>
+              <span>Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Speed Dial -->
+<div class="fixed bottom-6 right-6 z-50 group">
+  <!-- Main FAB -->
+  <button class="bg-primary text-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center text-2xl focus:outline-none group-hover:rotate-45 transition-transform">
+    +
+  </button>
+
+  <!-- Actions on Hover -->
+  <div class="flex flex-col items-end space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-16 right-0">
+
+    <!-- View Tasks -->
+    <div class="flex items-center space-x-2">
+      <span class="text-xs text-right min-w-[50px] whitespace-nowrap">View Tasks</span>
+      <button (click)="goToViewTasks()" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m-7 4h8a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      </button>
+    </div>
+
+
+    <!-- Edit Study -->
+    <div *ngIf="isAllowedToEdit()" class="flex items-center space-x-2">
+      <span class="text-xs text-gray-600">Edit</span>
+      <button (click)="goToEditStudy()" class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Upload File -->
+    <div *ngIf="isAllowedToEdit()"  class="flex items-center space-x-2">
+      <span class="text-xs text-gray-600">Upload</span>
+      <input #fileInput type="file" (change)="uploadFile($event)" style="display: none;">
+      <button type="button" (click)="fileInput.click()"
+              class="bg-green-500 hover:bg-green-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Add Task -->
+    <div *ngIf="isAllowedToEdit()"  class="flex items-center space-x-2">
+      <span class="text-xs text-right min-w-[50px] whitespace-nowrap">Add Task</span>
+      <button (click)="goToAddTask()" class="bg-purple-500 hover:bg-purple-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Delete Study -->
+    <div *ngIf="userRole == UserRole.Manager && isAllowedToEdit()" class="flex items-center space-x-2">
+      <span class="text-xs text-gray-600">Delete</span>
+      <button
+        (click)="DeleteStudy()"
+        class="bg-red-500 hover:bg-red-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+
+  </div>
+</div>

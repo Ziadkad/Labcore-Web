@@ -1,0 +1,125 @@
+<form [formGroup]="StudyForm" (ngSubmit)="onSubmitForm()" class="max-w-2xl mx-auto">
+  <!-- Title -->
+  <div class="mb-6">
+    <label for="title" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Study Title
+    </label>
+    <input
+      type="text"
+      id="title"
+      formControlName="title"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter study title"
+    />
+    <div *ngIf="submitted && StudyForm.get('title')?.invalid" class="text-red-600 text-sm mt-1">
+      Study title is required.
+    </div>
+  </div>
+
+  <!-- Objective -->
+  <div class="mb-6">
+    <label for="objective" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Objective
+    </label>
+    <input
+      type="text"
+      id="objective"
+      formControlName="objective"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter study objective"
+    />
+    <div *ngIf="submitted && StudyForm.get('objective')?.invalid" class="text-red-600 text-sm mt-1">
+      Objective is required.
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="mb-6">
+    <label for="description" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Description
+    </label>
+    <div class="border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-primary overflow-hidden">
+      <quill-editor
+        formControlName="description"
+        [modules]="editorModules"
+        [style]="{ height: '200px' }"
+        class="w-full p-3 focus:outline-none"
+        placeholder="Enter study description">
+      </quill-editor>
+    </div>
+    <div *ngIf="submitted && StudyForm.get('description')?.invalid" class="text-red-600 text-sm mt-1">
+      Description is required.
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Start Date -->
+    <div>
+      <label for="startDate" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        Start Date
+      </label>
+      <input
+        type="date"
+        id="startDate"
+        formControlName="startDate"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="submitted && StudyForm.get('startDate')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+
+    <!-- End Date -->
+    <div>
+      <label for="endDate" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        End Date
+      </label>
+      <input
+        type="date"
+        id="endDate"
+        formControlName="endDate"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="submitted && StudyForm.get('endDate')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+
+    <!-- Risk Level -->
+    <div>
+      <label for="riskLevel" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        Risk Level
+      </label>
+      <select
+        id="riskLevel"
+        formControlName="riskLevel"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option [ngValue]="null" disabled>Select risk level</option>
+        <option *ngFor="let level of riskLevelOptions" [ngValue]="level">
+          {{ level }}
+        </option>
+      </select>
+      <div *ngIf="submitted && StudyForm.get('riskLevel')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <button
+    type="submit"
+    class="w-full bg-accent hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition duration-300 mb-4"
+  >
+    {{ isAdd ? 'Create Study' : 'Update Study' }}
+  </button>
+
+<!--   Cancel Button-->
+  <button
+    type="button"
+    (click)="cancel()"
+    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition duration-300"
+  >
+    Cancel
+  </button>
+</form>

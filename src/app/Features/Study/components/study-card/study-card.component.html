@@ -1,0 +1,36 @@
+<!-- study-card.component.html -->
+<div
+  class="cursor-pointer bg-white border border-gray-200 rounded-2xl shadow-sm p-5 hover:shadow-md transition duration-300"
+  (click)="onClickHandler(study.id)"
+>
+  <!-- Title and Risk Level -->
+  <div class="flex items-center justify-between mb-2">
+    <h2 class="text-xl font-semibold text-gray-800 truncate">{{ study.title }}</h2>
+    <span
+      class="text-sm text-white px-2 py-1 rounded-full capitalize"
+      [ngClass]="getRiskLevelClass(parseInt(study.riskLevel))"
+        >
+      {{ getStatusLabel(parseInt(study.riskLevel)) }}
+    </span>
+
+  </div>
+
+  <!-- Objective -->
+  <div class="text-sm text-gray-600 italic mb-2 truncate">
+    {{ study.objective }}
+  </div>
+
+  <!-- Description (limited to 2 lines) -->
+  <p class="text-gray-700 text-sm line-clamp-2 mb-4 min-h-[2rem]"   [innerHTML]="study.description">
+  </p>
+
+  <!-- Dates -->
+  <div class="flex items-center justify-between text-xs text-gray-500">
+    <div>
+      <span class="font-medium">Start:</span> {{ study.startDate | date: 'mediumDate' }}
+    </div>
+    <div>
+      <span class="font-medium">End:</span> {{ study.endDate | date: 'mediumDate' }}
+    </div>
+  </div>
+</div>

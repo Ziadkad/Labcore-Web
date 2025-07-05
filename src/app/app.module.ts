@@ -17,6 +17,30 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 import {appConfig} from "./Core/Interceptors/appConfig";
+import { ProjectCardComponent } from './Features/Project/components/project-card/project-card.component';
+import { ProjectListPageComponent } from './Features/Project/pages/project-list-page/project-list-page.component';
+import { ProjectDetailPageComponent } from './Features/Project/pages/project-detail-page/project-detail-page.component';
+import { ProjectCreatePageComponent } from './Features/Project/pages/project-create-page/project-create-page.component';
+import { ProjectEditPageComponent } from './Features/Project/pages/project-edit-page/project-edit-page.component';
+import { ProjectFormComponent } from './Features/Project/components/project-form/project-form.component';
+import { StudyEditPageComponent } from './Features/Study/pages/study-edit-page/study-edit-page.component';
+import { StudyDetailPageComponent } from './Features/Study/pages/study-detail-page/study-detail-page.component';
+import { StudyCreatePageComponent } from './Features/Study/pages/study-create-page/study-create-page.component';
+import { StudyFormComponent } from './Features/Study/components/study-form/study-form.component';
+import { StudyCardComponent } from './Features/Study/components/study-card/study-card.component';
+import { TaskFormComponent } from './Features/TaskItem/components/task-form/task-form.component';
+import { TaskItemViewComponent } from './Features/TaskItem/components/task-item-view/task-item-view.component';
+import { TaskItemCreatePageComponent } from './Features/TaskItem/pages/task-item-create-page/task-item-create-page.component';
+import { TaskItemEditPageComponent } from './Features/TaskItem/pages/task-item-edit-page/task-item-edit-page.component';
+import { DashboardPageComponent } from './Features/Dashboard/pages/dashboard-page/dashboard-page.component';
+import {NgxSliderModule} from "@angular-slider/ngx-slider";
+import {QuillModule} from "ngx-quill";
+import {NgSelectModule} from "@ng-select/ng-select";
+import { TaskItemListPageComponent } from './Features/TaskItem/pages/task-item-list-page/task-item-list-page.component';
+import { TaskItemTableComponent } from './Features/TaskItem/components/task-item-table/task-item-table.component';
+import { TaskItemDetailPageComponent } from './Features/TaskItem/pages/task-item-detail-page/task-item-detail-page.component';
+import { MyTaskItemsCalendarComponent } from './Features/TaskItem/components/my-task-items-calendar/my-task-items-calendar.component';
+import { MyTaskItemsPageComponent } from './Features/TaskItem/pages/my-task-items-page/my-task-items-page.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +53,28 @@ import {appConfig} from "./Core/Interceptors/appConfig";
     LoginFormComponent,
     RegisterFormComponent,
     VerifyEmailFormComponent,
-    VerifyEmailPageComponent
+    VerifyEmailPageComponent,
+    ProjectCardComponent,
+    ProjectListPageComponent,
+    ProjectDetailPageComponent,
+    ProjectCreatePageComponent,
+    ProjectEditPageComponent,
+    ProjectFormComponent,
+    StudyEditPageComponent,
+    StudyDetailPageComponent,
+    StudyCreatePageComponent,
+    StudyFormComponent,
+    StudyCardComponent,
+    TaskFormComponent,
+    TaskItemViewComponent,
+    TaskItemCreatePageComponent,
+    TaskItemEditPageComponent,
+    DashboardPageComponent,
+    TaskItemListPageComponent,
+    TaskItemTableComponent,
+    TaskItemDetailPageComponent,
+    MyTaskItemsCalendarComponent,
+    MyTaskItemsPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +87,9 @@ import {appConfig} from "./Core/Interceptors/appConfig";
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    NgxSliderModule,
+    QuillModule.forRoot(),
+    NgSelectModule
   ],
   providers:  [appConfig],
   bootstrap: [AppComponent]

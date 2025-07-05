@@ -1,0 +1,153 @@
+<form [formGroup]="taskItemForm" (ngSubmit)="onSubmitForm()" class="max-w-2xl mx-auto">
+
+  <!-- Label -->
+  <div class="mb-6">
+    <label for="label" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Task Label
+    </label>
+    <input
+      type="text"
+      id="label"
+      formControlName="label"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter task label"
+    />
+    <div *ngIf="submitted && taskItemForm.get('label')?.invalid" class="text-red-600 text-sm mt-1">
+      Label is required.
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="mb-6">
+    <label for="description" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Description
+    </label>
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="4"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter task description"
+    ></textarea>
+    <div *ngIf="submitted && taskItemForm.get('description')?.invalid" class="text-red-600 text-sm mt-1">
+      Description is required.
+    </div>
+  </div>
+
+  <!-- Researchers -->
+  <div class="mb-6" *ngIf="!isAdd">
+    <label for="researchers" class="block mb-2 text-sm font-medium text-gray-800">
+      Researchers
+    </label>
+
+    <ng-select
+      [items]="eligibleAssignees"
+      bindValue="id"
+      [multiple]="true"
+      [searchable]="true"
+      [closeOnSelect]="false"
+      [placeholder]="taskItemForm.get('assignedTo')?.value?.length ? '' : 'Select The researchers you want to Assign this task to'"
+      formControlName="assignedTo"
+      class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ng-select-custom"
+    >
+
+      <!-- Selected chips -->
+      <ng-template ng-label-tmp let-item="item">
+        <span class="inline-flex items-center px-2 py-1 mr-2 mb-1 text-sm font-medium text-white bg-primary rounded-full">
+          {{ item.firstName }} {{ item.lastName }}
+        </span>
+      </ng-template>
+
+      <!-- Dropdown options -->
+      <ng-template ng-option-tmp let-item="item" let-index="index">
+        <div
+          class="px-2 py-1 bg-white dark:bg-gray-700 hover:bg-primary rounded text-sm text-gray-800 dark:text-gray-100"
+        >
+          {{ item.firstName }} {{ item.lastName }}
+        </div>
+      </ng-template>
+    </ng-select>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <!-- Start DateTime -->
+    <div>
+      <label for="startDate" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        Start Date & Time
+      </label>
+      <input
+        type="datetime-local"
+        id="startDate"
+        formControlName="startDate"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="submitted && taskItemForm.get('startdate')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+
+    <!-- End DateTime -->
+    <div>
+      <label for="endDate" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        End Date & Time
+      </label>
+      <input
+        type="datetime-local"
+        id="endDate"
+        formControlName="endDate"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="submitted && taskItemForm.get('enddate')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div  *ngIf="!isAdd" class="mb-6">
+    <label for="taskItemStatus" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Status
+    </label>
+    <select
+      id="taskItemStatus"
+      formControlName="taskItemStatus"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+    >
+      <option [ngValue]="null" disabled selected>Select status</option>
+      <option *ngFor="let status of taskItemStatusOptions" [ngValue]="status">
+        {{ status }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Review Notes -->
+  <div  *ngIf="!isAdd" class="mb-6">
+    <label for="reviewNotes" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Review Notes (Optional)
+    </label>
+    <textarea
+      id="reviewNotes"
+      formControlName="reviewNotes"
+      rows="3"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Any comments or observations"
+    ></textarea>
+  </div>
+
+  <!-- Submit Button -->
+  <button
+    type="submit"
+    class="w-full bg-accent hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition duration-300 mb-4"
+  >
+    {{ isAdd ? 'Create Task' : 'Update Task' }}
+  </button>
+
+  <!-- Cancel Button -->
+  <button
+    type="button"
+    (click)="cancel()"
+    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition duration-300"
+  >
+    Cancel
+  </button>
+</form>

@@ -1,0 +1,39 @@
+<div  (click)="onClickHandler(project.id)" class="cursor-pointer  bg-[#fCffff] border border-gray-200 rounded-2xl shadow-sm p-4 w-full max-w-md">
+  <!-- Header with Icon and Title -->
+  <div class="flex items-center justify-between mb-2">
+    <div class="flex items-center gap-2">
+      <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+      </svg>
+      <h2 class="text-lg font-semibold text-gray-800 truncate">{{ project.name }}</h2>
+    </div>
+
+    <span
+      class="text-xs font-medium px-2 py-0.5 rounded-full"
+      [ngClass]="{
+    'bg-yellow-100 text-yellow-800': getStatusLabel(parseInt(project.status)) === 'Draft',
+    'bg-blue-100 text-blue-800': getStatusLabel(parseInt(project.status)) === 'Active',
+    'bg-green-100 text-green-800': getStatusLabel(parseInt(project.status)) === 'Completed'
+      }"
+        >
+      {{ getStatusLabel(parseInt(project.status)) }}
+    </span>
+
+  </div>
+  <!-- Description Preview -->
+  <p
+    class="text-sm text-gray-600 line-clamp-2 mb-3 min-h-[3.5rem]"
+    [innerHTML]="project.description"
+  ></p>
+
+
+  <!-- Progress Bar -->
+  <div class="w-full bg-gray-100 rounded-full h-2.5 mb-1">
+    <div class="bg-primary h-2.5 rounded-full transition-all duration-300"
+         [style.width.%]="project.progressPercentage"></div>
+  </div>
+  <p class="text-xs text-gray-500 text-right">
+    {{ project.progressPercentage }}%
+  </p>
+</div>

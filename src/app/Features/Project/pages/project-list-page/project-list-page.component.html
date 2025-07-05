@@ -1,0 +1,93 @@
+<div class="max-w-7xl mx-auto p-6">
+  <!--filters-->
+  <div class="flex items-center gap-2 pb-4 w-full flex-wrap">
+    <div class="flex-1 min-w-[180px]">
+      <label for="description" class="block mb-1 text-xs font-medium text-gray-700">Description</label>
+      <input [(ngModel)]="keywordValue" type="text" id="description"
+             class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm"
+             placeholder="Keyword">
+    </div>
+    <div class="flex-1 min-w-[180px]">
+      <label for="startDate" class="block mb-1 text-xs font-medium text-gray-700">Start Date</label>
+      <input [(ngModel)]="startDateValue" type="date" id="startDate"
+             class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+    </div>
+    <div class="flex-1 min-w-[180px]">
+      <label for="endDate" class="block mb-1 text-xs font-medium text-gray-700">End Date</label>
+      <input [(ngModel)]="endDateValue" type="date" id="endDate"
+             class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+    </div>
+    <div class="flex-1 min-w-[180px]">
+      <label for="status" class="block mb-1 text-xs font-medium text-gray-700">Status</label>
+      <select [(ngModel)]="statusValue" id="status"
+              class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+        <option [ngValue]="null">All statuses</option>
+        <option *ngFor="let s of statusOptions" [ngValue]="s">{{ s }}</option>
+      </select>
+    </div>
+
+    <div class="flex flex-col gap-1 flex-1 min-w-[200px]">
+      <label class="text-xs font-medium text-gray-700">Progress Range (%)</label>
+      <ngx-slider
+        [(value)]="progressPercentageMinValue"
+        [(highValue)]="progressPercentageMaxValue"
+        [options]="sliderOptions">
+      </ngx-slider>
+    </div>
+
+    <div class="flex-1 min-w-[180px]">
+      <label for="manager" class="block mb-1 text-xs font-medium text-gray-700">Manager</label>
+      <select [(ngModel)]="managerValue" id="manager"
+              class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+        <option [ngValue]="null">Select a manager</option>
+        <option *ngFor="let user of managerList" [ngValue]="user.id">{{ user.firstName + ' ' + user.lastName }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error()" class="text-red-600 font-semibold">
+    {{ error() }}
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loading()" class="text-center">
+    <span class="text-gray-500">Loading projects...</span>
+  </div>
+
+  <!-- Project Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" *ngIf="projects()">
+    <app-project-card *ngFor="let project of projects()?.items" [project] = project />
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation" class="flex justify-center pt-4" *ngIf="(projects()?.totalCount ?? 0) > 0">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <li>
+        <button (click)="changePage(this.pageQuery().page - 1)"
+                [class]="isFirstPage() ? 'cursor-not-allowed text-gray-300' : 'text-gray-500'"
+                [attr.aria-disabled]="isFirstPage() ? true : null"
+                class="flex items-center justify-center px-4 h-10 leading-tight bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                [disabled]="isFirstPage()">Previous</button>
+      </li>
+
+      <li *ngFor="let page of [].constructor(pageCount); let i = index">
+        <a href="#" (click)="changePage(i + 1)"
+           [class]="this.pageQuery().page  === (i + 1) ? 'text-white border border-gray-300 bg-gray-600' : 'text-gray-500 bg-white border border-gray-300'"
+           class="flex items-center justify-center px-4 h-10 leading-tight hover:bg-gray-200 hover:text-gray-700">
+          {{ i + 1 }}
+        </a>
+      </li>
+
+      <li>
+        <button (click)="changePage(this.pageQuery().page  + 1)"
+                [class]="isLastPage() ? 'cursor-not-allowed text-gray-300' : 'text-gray-500'"
+                [attr.aria-disabled]="isLastPage() ? true : null"
+                class="flex items-center justify-center px-4 h-10 leading-tight bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                [disabled]="isLastPage()">Next</button>
+      </li>
+    </ul>
+  </nav>
+
+
+</div>

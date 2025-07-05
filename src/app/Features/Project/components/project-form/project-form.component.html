@@ -1,0 +1,163 @@
+<form [formGroup]="Form" (ngSubmit)="onSubmitForm()" class="max-w-2xl mx-auto">
+  <!-- Project Name -->
+  <div class="mb-6">
+    <label for="name" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Project Name
+    </label>
+    <input
+      type="text"
+      id="name"
+      formControlName="name"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter project name"
+    />
+    <div *ngIf="submitted && Form.get('name')?.invalid" class="text-red-600 text-sm mt-1">
+      Project name is required.
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="mb-6">
+    <label for="description" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Description
+    </label>
+
+    <div class="border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-primary overflow-hidden">
+      <quill-editor
+        formControlName="description"
+        [modules]="editorModules"
+        [style]="{ height: '200px' }"
+        class="w-full p-3 focus:outline-none"
+        placeholder="Enter project description">
+      </quill-editor>
+    </div>
+
+    <div *ngIf="submitted && Form.get('description')?.invalid" class="text-red-600 text-sm mt-1">
+      Description is required.
+    </div>
+  </div>
+
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Start Date -->
+    <div>
+      <label for="startDate" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        Start Date
+      </label>
+      <input
+        type="date"
+        id="startDate"
+        formControlName="startDate"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="submitted && Form.get('startDate')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+
+    <!-- End Date -->
+    <div>
+      <label for="endDate" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        End Date
+      </label>
+      <input
+        type="date"
+        id="endDate"
+        formControlName="endDate"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="submitted && Form.get('endDate')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div *ngIf="!add">
+      <label for="status" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        Status
+      </label>
+      <select
+        id="status"
+        formControlName="status"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option [ngValue]="null" disabled selected>Select status</option>
+        <option *ngFor="let status of projectStatusOptions" [value]="status">
+          {{ status }}
+        </option>
+      </select>
+
+      <div *ngIf="submitted && Form.get('status')?.invalid" class="text-red-600 text-sm mt-1">
+        Required.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Public Toggle -->
+  <div class="mb-6 flex items-center">
+    <input
+      type="checkbox"
+      id="isPublic"
+      formControlName="isPublic"
+      class="w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary"
+    />
+    <label for="isPublic" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Make project public
+    </label>
+  </div>
+
+  <!-- Researchers -->
+  <div class="mb-6" *ngIf="!add">
+    <label for="researchers" class="block mb-2 text-sm font-medium text-gray-800">
+      Researchers
+    </label>
+
+    <ng-select
+      [items]="researchers"
+      bindValue="id"
+      [multiple]="true"
+      [searchable]="true"
+      [closeOnSelect]="false"
+      [placeholder]="Form.get('researchers')?.value?.length ? '' : 'Select researchers'"
+      formControlName="researchers"
+      class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ng-select-custom"
+    >
+
+      <!-- Selected chips -->
+      <ng-template ng-label-tmp let-item="item">
+        <span class="inline-flex items-center px-2 py-1 mr-2 mb-1 text-sm font-medium text-white bg-primary rounded-full">
+          {{ item.firstName }} {{ item.lastName }}
+        </span>
+      </ng-template>
+
+      <!-- Dropdown options -->
+      <ng-template ng-option-tmp let-item="item" let-index="index">
+        <div
+          class="px-2 py-1 bg-white dark:bg-gray-700 hover:bg-primary rounded text-sm text-gray-800 dark:text-gray-100"
+        >
+          {{ item.firstName }} {{ item.lastName }}
+        </div>
+      </ng-template>
+    </ng-select>
+  </div>
+
+
+
+
+  <!-- Submit Button -->
+  <button
+    type="submit"
+    class="w-full bg-accent hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition duration-300 mb-4"
+  >
+    {{ add ? 'Create Project' : 'Update Project' }}
+  </button>
+
+  <!-- Cancel Button (Optional) -->
+  <button
+    type="button"
+    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition duration-300"
+  >
+    Cancel
+  </button>
+</form>

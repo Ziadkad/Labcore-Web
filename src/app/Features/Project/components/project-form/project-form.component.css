@@ -1,0 +1,11 @@
+::ng-deep ng-select .ng-select-container {
+  max-height: 120px;
+  overflow-y: auto;
+}
+::ng-deep .ng-value-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.ng-select.ng-select-multiple .ng-select-container .ng-placeholder {
+  display: none !important;
+}

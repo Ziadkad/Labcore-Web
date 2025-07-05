@@ -1,0 +1,50 @@
+<div class="overflow-x-auto rounded-xl shadow bg-white">
+  <div class="rounded-xl overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-primary text-white">
+      <tr>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Label</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Description</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Start Date</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">End Date</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Status</th>
+        <th class="px-6 py-3 text-sm font-semibold"></th>
+        <th *ngIf="isAllowedToEdit()" class="px-6 py-3 text-sm font-semibold"></th>
+        <th *ngIf="isAllowedToEdit()" class="px-6 py-3 text-sm font-semibold"></th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+      <tr *ngFor="let item of taskItems" class="hover:bg-gray-50">
+        <td class="px-6 py-3 text-sm text-gray-900 font-medium">{{ item.label }}</td>
+        <td class="px-6 py-3 text-sm text-gray-700 max-w-[200px] truncate">
+          {{ item.description }}
+        </td>
+        <td class="px-6 py-3 text-sm text-gray-600">{{ item.startDate | date:'short' }}</td>
+        <td class="px-6 py-3 text-sm text-gray-600">{{ item.endDate | date:'short' }}</td>
+        <td *ngIf="isAllowedToEdit()" class="px-6 py-3">
+          <select [(ngModel)]="item.taskItemStatus"
+                  (ngModelChange)="onStatusChange(item.id, $event)"
+                  name="status_{{item.id}}"
+                  class="w-full border border-gray-300 rounded-md text-sm px-3 py-1 focus:ring-2 focus:ring-primary focus:outline-none">
+            <option *ngFor="let status of taskItemStatusOptions" [value]="status">
+              {{ status }}
+            </option>
+          </select>
+        </td>
+        <td *ngIf="!isAllowedToEdit()"  class="px-6 py-3 text-sm text-gray-600">{{ item.taskItemStatus }}</td>
+
+
+        <td class="px-6 py-3">
+          <button (click)="onViewDetails(item.id)" class="text-sm text-blue-600 hover:text-blue-800 font-medium">View</button>
+        </td>
+        <td *ngIf="isAllowedToEdit()" class="px-6 py-3">
+          <button (click)="onUpdate(item.id)" class="text-sm text-amber-600 hover:text-amber-800 font-medium">Update</button>
+        </td>
+        <td *ngIf="isAllowedToEdit()" class="px-6 py-3">
+          <button (click)="onDelete(item.id)" class="text-sm text-red-600 hover:text-red-800 font-medium">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

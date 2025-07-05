@@ -7,13 +7,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#13304c',        // Sidebar / Header
-        accent: '#336fae',      // Buttons / Active items
-        secondary: '#1a4263',
-        white: '#fff',
-        card: '#F8FAFC',           // Background for panels
-        textDark: '#1E293B',       // For titles
-        textMuted: '#64748B',      // For secondary text
+        primary: '#6dd7fd',        // Sidebar / Header
+        accent: '#bef0ff',      // Buttons / Active items
+        secondary: '#bef0ff',
+        third: '#005acd',
+        white: '#f5ffff',
+        card: '#F8FAFC',
         status: {
           inProgress: '#10B981',   // Green
           completed: '#3B82F6',    // Blue
