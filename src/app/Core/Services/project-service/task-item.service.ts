@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {Observable} from "rxjs";
 import {TaskItem} from "../../../Shared/Interfaces/Project/TaskItem/task-item";
 import {UpdateTaskItemInterface} from "../../../Shared/Interfaces/Project/TaskItem/update-task-item-interface";
 import {CreateTaskItemInterface} from "../../../Shared/Interfaces/Project/TaskItem/create-task-item-interface";
 import {Guid} from "../../../Shared/Interfaces/Common/Guid";
 import {TaskItemStatus} from "../../../Shared/Interfaces/Project/TaskItem/task-item-status";
+import { PageQueryResult } from '../../../Shared/Interfaces/Common/page-query-result';
 
 @Injectable({
   providedIn: 'root'
@@ -42,21 +43,25 @@ export class TaskItemService {
     endDate?: Date,
     taskItemStatus?: TaskItemStatus,
     pageQuery?: { page: number; pageSize: number }
-  ): Observable<any> {
-    const params: any = {};
+  ): Observable<PageQueryResult<TaskItem>> {
+    let params = new HttpParams();
 
-    if (keyword) params.keyword = keyword;
-    if (assignedTo && assignedTo.length > 0) params.assignedTo = assignedTo;
-    if (startDate) params.startDate = startDate.toISOString();
-    if (endDate) params.endDate = endDate.toISOString();
-    if (taskItemStatus !== undefined && taskItemStatus !== null)
-      params.taskItemStatus = taskItemStatus;
-    if (pageQuery) {
-      params["pageQuery.page"] = pageQuery.page;
-      params["pageQuery.pageSize"] = pageQuery.pageSize;
+    if (keyword) params = params.set('keyword', keyword);
+    if (assignedTo && assignedTo.length > 0) {
+      assignedTo.forEach(id => {
+        params = params.append('assignedTo', id);
+      });
     }
-
-    return this.http.get<any>(`${this.baseUrl}`, { params });
+    if (startDate) params = params.set('startDate', startDate.toISOString());
+    if (endDate) params = params.set('endDate', endDate.toISOString());
+    if (taskItemStatus !== undefined && taskItemStatus !== null)
+      params = params.set('taskItemStatus', taskItemStatus.toString());
+    if (pageQuery) {
+      params = params.set('page', pageQuery.page.toString());
+      params = params.set('pageSize', pageQuery.pageSize.toString());
+    }
+    return this.http.get<PageQueryResult<TaskItem>>(`${this.baseUrl}`, { params });
   }
+
 
 }
