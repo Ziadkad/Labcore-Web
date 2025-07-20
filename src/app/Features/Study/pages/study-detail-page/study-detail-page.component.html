@@ -38,7 +38,7 @@
     </div>
 
     <!-- Files Section -->
-    <div *ngIf="study.pathsFiles?.length" class="mt-10">
+    <div *ngIf="study.pathsFiles?.length" class="mt-10 w-11/12">
       <span class="font-semibold">Study Files</span>
       <div class="space-y-3 mt-4">
         <div *ngFor="let fileLink of study.pathsFiles" class="flex items-center justify-between group px-2 py-1">
@@ -52,7 +52,7 @@
             <button (click)="downloadStudyFile(fileLink)"
                     class="text-sm text-primary hover:underline focus:outline-none flex items-center space-x-1">
               <i class="fa fa-download"></i>
-              <span>Download</span>
+              <span>View</span>
             </button>
             <button (click)="deleteProjectFile(fileLink)"
                     class="text-sm text-red-600 hover:underline focus:outline-none flex items-center space-x-1">

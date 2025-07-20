@@ -3,4 +3,5 @@ export enum UserRole {
   Researcher = 1,
   Manager = 2,
   Admin = 3,
+  ResourceManager = 4,
 }

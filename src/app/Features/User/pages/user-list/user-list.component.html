@@ -1,0 +1,87 @@
+<div class="max-w-6xl mx-auto p-6">
+
+  <!-- Title -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800">User Management</h1>
+    <p class="text-sm text-gray-500">Browse and manage registered users</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex items-center gap-2 pb-4 w-full flex-wrap">
+    <!-- Keyword -->
+    <div class="flex-1 min-w-[180px]">
+      <label for="keyword" class="block mb-1 text-xs font-medium text-gray-700">Keyword</label>
+      <input [(ngModel)]="keyword" (ngModelChange)="setKeyword($event)" type="text" id="keyword"
+             class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm"
+             placeholder="Search user...">
+    </div>
+
+    <!-- Gender -->
+    <div class="flex-1 min-w-[180px]">
+      <label for="gender" class="block mb-1 text-xs font-medium text-gray-700">Gender</label>
+      <select [(ngModel)]="gender" (ngModelChange)="setGender($event)" id="gender"
+              class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+        <option [ngValue]="null">All Genders</option>
+        <option [ngValue]="Gender.Male">Male</option>
+        <option [ngValue]="Gender.Female">Female</option>
+      </select>
+    </div>
+
+    <!-- Roles -->
+    <div class="flex-1 min-w-[180px]">
+      <label for="role" class="block mb-1 text-xs font-medium text-gray-700">Roles</label>
+      <select [(ngModel)]="role" (ngModelChange)="setRole($event)" id="role"
+              class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+        <option [ngValue]="null">All Roles</option>
+        <option *ngFor="let role of userRoleEntries" [ngValue]="role.value">{{ role.key }}</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="text-center py-4">
+    <span class="text-gray-500">Loading users...</span>
+  </div>
+
+  <!-- User Table -->
+  <div *ngIf="!loading() && users()?.length">
+    <app-user-table [users]="users()"></app-user-table>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!loading() && users()?.length === 0" class="text-center text-gray-500 py-4">
+    No users found.
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation" class="flex justify-center pt-4" *ngIf="pageCount > 1">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <li>
+        <button (click)="changePage(pageQuery().page - 1)"
+                [class]="isFirstPage() ? 'cursor-not-allowed text-gray-300' : 'text-gray-500'"
+                [disabled]="isFirstPage()"
+                class="flex items-center justify-center px-4 h-10 leading-tight bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+          Previous
+        </button>
+      </li>
+
+      <li *ngFor="let page of [].constructor(pageCount); let i = index">
+        <button (click)="changePage(i + 1)"
+           [class]="pageQuery().page === (i + 1) ? 'text-white border border-gray-300 bg-gray-600' : 'text-gray-500 bg-white border border-gray-300'"
+           class="flex items-center justify-center px-4 h-10 leading-tight hover:bg-gray-200 hover:text-gray-700">
+          {{ i + 1 }}
+        </button>
+      </li>
+
+      <li>
+        <button (click)="changePage(pageQuery().page + 1)"
+                [class]="isLastPage() ? 'cursor-not-allowed text-gray-300' : 'text-gray-500'"
+                [disabled]="isLastPage()"
+                class="flex items-center justify-center px-4 h-10 leading-tight bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+          Next
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

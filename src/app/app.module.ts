@@ -3,8 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './Layout/navbar/navbar.component';
-import { FooterComponent } from './Layout/footer/footer.component';
 import { SidebarComponent } from './Layout/sidebar/sidebar.component';
 import { LoginPageComponent } from './Features/Auth/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './Features/Auth/pages/register-page/register-page.component';
@@ -29,7 +27,6 @@ import { StudyCreatePageComponent } from './Features/Study/pages/study-create-pa
 import { StudyFormComponent } from './Features/Study/components/study-form/study-form.component';
 import { StudyCardComponent } from './Features/Study/components/study-card/study-card.component';
 import { TaskFormComponent } from './Features/TaskItem/components/task-form/task-form.component';
-import { TaskItemViewComponent } from './Features/TaskItem/components/task-item-view/task-item-view.component';
 import { TaskItemCreatePageComponent } from './Features/TaskItem/pages/task-item-create-page/task-item-create-page.component';
 import { TaskItemEditPageComponent } from './Features/TaskItem/pages/task-item-edit-page/task-item-edit-page.component';
 import { DashboardPageComponent } from './Features/Dashboard/pages/dashboard-page/dashboard-page.component';
@@ -41,12 +38,29 @@ import { TaskItemTableComponent } from './Features/TaskItem/components/task-item
 import { TaskItemDetailPageComponent } from './Features/TaskItem/pages/task-item-detail-page/task-item-detail-page.component';
 import { MyTaskItemsCalendarComponent } from './Features/TaskItem/components/my-task-items-calendar/my-task-items-calendar.component';
 import { MyTaskItemsPageComponent } from './Features/TaskItem/pages/my-task-items-page/my-task-items-page.component';
+import {
+  AgendaService,
+  DayService, MonthService,
+  RecurrenceEditorModule,
+  ScheduleModule,
+  WeekService,
+  WorkWeekService,
+} from '@syncfusion/ej2-angular-schedule';
+import { ResourceCreatePageComponent } from './Features/Resource/pages/resource-create-page/resource-create-page.component';
+import { ResourceEditPageComponent } from './Features/Resource/pages/resource-edit-page/resource-edit-page.component';
+import { ResourceDetailPageComponent } from './Features/Resource/pages/resource-detail-page/resource-detail-page.component';
+import { ResourcelistPageComponent } from './Features/Resource/pages/resourcelist-page/resourcelist-page.component';
+import { ResourceFormComponent } from './Features/Resource/components/resource-form/resource-form.component';
+import { ResourceTableComponent } from './Features/Resource/components/resource-table/resource-table.component';
+import { CreatereservationComponent } from './Features/ResourceReservation/components/createreservation/createreservation.component';
+import { CreatereservationForTaskItemComponent } from './Features/ResourceReservation/components/createreservation-for-task-item/createreservation-for-task-item.component';
+import { MyReservationPageComponent } from './Features/ResourceReservation/pages/my-reservation-page/my-reservation-page.component';
+import { UserListComponent } from './Features/User/pages/user-list/user-list.component';
+import { UserTableComponent } from './Features/User/components/user-table/user-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    FooterComponent,
     SidebarComponent,
     LoginPageComponent,
     RegisterPageComponent,
@@ -66,7 +80,6 @@ import { MyTaskItemsPageComponent } from './Features/TaskItem/pages/my-task-item
     StudyFormComponent,
     StudyCardComponent,
     TaskFormComponent,
-    TaskItemViewComponent,
     TaskItemCreatePageComponent,
     TaskItemEditPageComponent,
     DashboardPageComponent,
@@ -75,6 +88,17 @@ import { MyTaskItemsPageComponent } from './Features/TaskItem/pages/my-task-item
     TaskItemDetailPageComponent,
     MyTaskItemsCalendarComponent,
     MyTaskItemsPageComponent,
+    ResourceCreatePageComponent,
+    ResourceEditPageComponent,
+    ResourceDetailPageComponent,
+    ResourcelistPageComponent,
+    ResourceFormComponent,
+    ResourceTableComponent,
+    CreatereservationComponent,
+    CreatereservationForTaskItemComponent,
+    MyReservationPageComponent,
+    UserListComponent,
+    UserTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,9 +113,16 @@ import { MyTaskItemsPageComponent } from './Features/TaskItem/pages/my-task-item
     }),
     NgxSliderModule,
     QuillModule.forRoot(),
-    NgSelectModule
+    NgSelectModule,
+    ScheduleModule,
+    RecurrenceEditorModule,
   ],
-  providers:  [appConfig],
+  providers:  [appConfig,
+    DayService,
+    WeekService,
+    WorkWeekService,
+    MonthService,
+    AgendaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

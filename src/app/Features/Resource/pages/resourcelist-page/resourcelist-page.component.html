@@ -1,0 +1,101 @@
+<div class="max-w-6xl mx-auto p-6">
+
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800">Resources</h1>
+    <p class="text-sm text-gray-500">Manage and explore available resources</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex items-center gap-2 pb-4 w-full flex-wrap">
+    <div class="flex-1 min-w-[180px]">
+      <label for="keyword" class="block mb-1 text-xs font-medium text-gray-700">Keyword</label>
+      <input [(ngModel)]="keyword" id="keyword" type="text"
+             class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm"
+             placeholder="Search resource...">
+    </div>
+
+    <div class="flex-1 min-w-[180px]">
+      <label for="type" class="block mb-1 text-xs font-medium text-gray-700">Type</label>
+      <select [(ngModel)]="type" id="type"
+              class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+        <option [ngValue]="null">All types</option>
+        <option *ngFor="let t of ResourceType | keyvalue" [ngValue]="t.value">{{ t.value }}</option>
+      </select>
+    </div>
+
+    <div class="flex-1 min-w-[180px]">
+      <label for="status" class="block mb-1 text-xs font-medium text-gray-700">Status</label>
+      <select [(ngModel)]="status" id="status"
+              class="border border-gray-300 text-gray-900 rounded-md focus:ring-gray-400 focus:border-gray-400 block w-full px-2 py-1 text-sm">
+        <option [ngValue]="null">All statuses</option>
+        <option *ngFor="let s of ResourceStatus | keyvalue" [ngValue]="s.value">{{ s.value }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading()" class="text-center py-4">
+    <span class="text-gray-500">Loading resources...</span>
+  </div>
+
+  <!-- Resource Cards / Table -->
+  <div *ngIf="resourceList().length > 0">
+    <app-resource-table [resources]="resourceList()"></app-resource-table>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!loading() && resourceList().length === 0" class="text-center text-gray-500 py-4">
+    No resources found.
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation" class="flex justify-center pt-4" *ngIf="resourceList().length > 0">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <li>
+        <button (click)="changePage(pageQuery().page - 1)"
+                [class]="isFirstPage() ? 'cursor-not-allowed text-gray-300' : 'text-gray-500'"
+                [disabled]="isFirstPage()"
+                class="flex items-center justify-center px-4 h-10 leading-tight bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+          Previous
+        </button>
+      </li>
+
+      <li *ngFor="let page of [].constructor(pageCount); let i = index">
+        <button  (click)="changePage(i + 1)"
+           [class]="pageQuery().page === (i + 1) ? 'text-white border border-gray-300 bg-gray-600' : 'text-gray-500 bg-white border border-gray-300'"
+           class="flex items-center justify-center px-4 h-10 leading-tight hover:bg-gray-200 hover:text-gray-700">
+          {{ i + 1 }}
+        </button>
+      </li>
+
+      <li>
+        <button (click)="changePage(pageQuery().page + 1)"
+                [class]="isLastPage() ? 'cursor-not-allowed text-gray-300' : 'text-gray-500'"
+                [disabled]="isLastPage()"
+                class="flex items-center justify-center px-4 h-10 leading-tight bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+          Next
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- Floating Add Button -->
+<div *ngIf="userRole == UserRole.ResourceManager" class="fixed bottom-6 right-6 z-50 group">
+  <button class="bg-primary text-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center text-2xl focus:outline-none group-hover:rotate-45 transition-transform">
+    +
+  </button>
+
+  <div class="flex flex-col items-end space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-16 right-0">
+    <div class="flex items-center space-x-2">
+      <span class="text-xs text-right min-w-[50px] whitespace-nowrap">Add Resource</span>
+      <button (click)="goToAddResource()" class="bg-purple-500 hover:bg-purple-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,115 @@
+<form [formGroup]="reservationForm" (ngSubmit)="createReservation()" class="max-w-4xl mx-auto px-4 py-4">
+
+  <!-- Resource Selection -->
+  <div class="mb-4">
+    <label for="resourceId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+      Select Resource
+    </label>
+    <ng-select
+      [items]="listResources"
+      bindLabel="name"
+      bindValue="id"
+      placeholder="Select a resource"
+      [searchable]="true"
+      formControlName="resourceId"
+      [clearable]="true"
+      class="w-full"
+      [ngClass]="{
+        'border bg-[#fff] p-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:outline-none': true,
+        'ng-invalid ng-touched': reservationForm.get('resourceId')?.touched && reservationForm.get('resourceId')?.invalid
+      }"
+    >
+    </ng-select>
+
+    <div *ngIf="reservationForm.get('resourceId')?.touched && reservationForm.get('resourceId')?.invalid" class="text-red-600 text-sm mt-1">
+      Resource is required.
+    </div>
+  </div>
+
+
+  <!-- Grid Inputs -->
+  <div class="sm:grid sm:grid-cols-2 sm:gap-4">
+
+    <!-- Start Time -->
+    <div class="mb-4">
+      <label for="startTime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Start Time
+      </label>
+      <input
+        type="datetime-local"
+        id="startTime"
+        formControlName="startTime"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="reservationForm.get('startTime')?.touched && reservationForm.get('startTime')?.errors?.['startTimeInPast']" class="text-red-600 text-sm mt-1">
+        Start time must be in the future.
+      </div>
+    </div>
+
+    <!-- End Time -->
+    <div class="mb-4">
+      <label for="endTime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        End Time
+      </label>
+      <input
+        type="datetime-local"
+        id="endTime"
+        formControlName="endTime"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="reservationForm.hasError('startAfterEnd') && reservationForm.get('endTime')?.touched" class="text-red-600 text-sm mt-1">
+        Start time must be before end time.
+      </div>
+    </div>
+
+    <!-- Quantity (only for Consumable resources) -->
+    <div *ngIf="type == ResourceType.Consumable" class="mb-4 sm:col-span-2">
+      <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Quantity
+      </label>
+      <input
+        type="number"
+        id="quantity"
+        formControlName="quantity"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="Enter quantity"
+      />
+      <div *ngIf="reservationForm.get('quantity')?.touched && reservationForm.get('quantity')?.errors?.['quantityInvalid']" class="text-red-600 text-sm mt-1">
+        Quantity must be greater than 0 if specified.
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="mb-4 sm:col-span-2">
+      <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Notes
+      </label>
+      <textarea
+        id="notes"
+        formControlName="notes"
+        rows="3"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="Additional notes (optional)"
+      ></textarea>
+    </div>
+
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
+    <button
+      type="submit"
+      class="w-full sm:w-auto bg-primary hover:bg-secondary text-white font-medium py-2 px-6 rounded-md transition duration-300 mb-2 sm:mb-0"
+    >
+      Create Reservation
+    </button>
+
+    <button
+      type="button"
+      class="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-6 rounded-md transition duration-300"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+  </div>
+</form>

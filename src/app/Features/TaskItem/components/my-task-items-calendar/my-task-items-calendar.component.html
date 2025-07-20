@@ -1,1 +1,6 @@
-<p>my-task-items-calendar works!</p>
+<ejs-schedule
+  [height]="'650px'"
+  [selectedDate]="selectedDate"
+  [eventSettings]="{ dataSource: calendarEvents() }"
+  (eventClick)="onEventClick($event)">
+</ejs-schedule>

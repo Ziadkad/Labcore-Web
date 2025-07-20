@@ -13,6 +13,11 @@ import {TaskItemService} from "../../../../Core/Services/project-service/task-it
 import {User} from "../../../../Shared/Interfaces/User/user";
 import {UserService} from "../../../../Core/Services/user-service/user.service";
 import {TaskItemStatus} from "../../../../Shared/Interfaces/Project/TaskItem/task-item-status";
+import { UserRole } from '../../../../Shared/Interfaces/Auth/user-role';
+import { ResourceReservationService } from '../../../../Core/Services/resource-service/resource-reservation.service';
+import {
+  ResourceReservationWithResource
+} from '../../../../Shared/Interfaces/Resource/ResourceReservation/resource-reservation-with-resource';
 
 @Component({
   selector: 'app-task-item-detail-page',
@@ -28,6 +33,9 @@ export class TaskItemDetailPageComponent implements OnInit {
   userId: Guid | undefined;
   isAllowedToEdit = signal(false);
   assignedTo : User[] = [];
+  isModalOpen: boolean = false;
+
+  reservations: ResourceReservationWithResource[] = [];
 
   constructor(private readonly route: ActivatedRoute,
               private readonly router: Router,
@@ -38,6 +46,7 @@ export class TaskItemDetailPageComponent implements OnInit {
               private readonly authService: AuthService,
               private readonly projectService: ProjectService,
               private readonly userService : UserService,
+              private readonly resourceReservationService: ResourceReservationService,
   ) {
     effect(() => {
       this.currentUser = this.authService.currentUser();
@@ -65,11 +74,10 @@ export class TaskItemDetailPageComponent implements OnInit {
           if(data.assignedTo.length != 0){
             this.loadUsers(data.assignedTo)
           }
+          if(data.resources.length != 0){
+            this.loadReservations(data.resources);
+          }
           this.loadStudy(data.studyId);
-        },
-        error: (err) => {
-          const message = err.message ?? 'Error loading the Study.';
-          this.toastr.error(message);
         }
       }
     )
@@ -88,6 +96,20 @@ export class TaskItemDetailPageComponent implements OnInit {
       }
     )
   }
+
+
+  loadReservations(ids: number[]) {
+    this.resourceReservationService.getReservations(ids,undefined,undefined,undefined,undefined,undefined,{page:1,pageSize:22000}).subscribe({
+      next: data => {
+        this.reservations = data.items;
+      },
+      error: error => {
+        this.toastr.error('Error while loading Reservations');
+      }
+    })
+
+  }
+
 
   loadUsers(researcherIds:Guid[]): void {
     this.userService.getAllUsers(
@@ -170,11 +192,35 @@ export class TaskItemDetailPageComponent implements OnInit {
     return fullName.length > 36 ? fullName.substring(36) : fullName;
   }
 
+
+  deleteReservation(id:number){
+    const confirmed = window.confirm('Are you sure you want to delete this reservation?');
+    if (!confirmed) return;
+    this.resourceReservationService.deleteReservation(id).subscribe({
+      next: data => {
+        this.toastr.success('Reservation deleted');
+      },
+      error: (err) => {
+        this.toastr.error('There was an issue deleting Reservation');
+      }
+    })
+  }
+
   goToEditTaskItem(): void {
     this.router.navigate(['/edittaskitem', this.taskItem.id]);
   }
 
 
+
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.loadTaskItem();
+  }
 
   private mapStatusNumberToEnum(value: number): TaskItemStatus {
     const map: { [key: number]: TaskItemStatus } = {
@@ -184,4 +230,6 @@ export class TaskItemDetailPageComponent implements OnInit {
     };
     return map[value];
   }
+
+  protected readonly UserRole = UserRole;
 }

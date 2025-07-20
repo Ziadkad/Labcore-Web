@@ -138,6 +138,15 @@ export class ProjectFormComponent implements OnInit {
     });
   }
 
+  cancel(){
+    if(this.add){
+      this.router.navigate(['/project'])
+    }
+    else{
+      this.router.navigate(['/project', this.id])
+    }
+  }
+
   loadResearchers() {
     this.userService.getAllUsers(  undefined,
       undefined,

@@ -1,0 +1,174 @@
+<!-- Modal Overlay -->
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+  <!-- Modal Box -->
+  <div class="bg-gray-50 rounded-xl shadow-lg w-full max-w-md p-6 relative">
+
+    <!-- Close Button -->
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg">&times;</button>
+
+    <!-- Modal Title -->
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Create a Reservation for {{resource.name}}</h3>
+
+    <!-- Embedded Reservation Form -->
+    <app-createreservation [resource]="resource" (close)="closeModal()"></app-createreservation>
+
+  </div>
+</div>
+
+
+
+<div class="max-w-6xl mx-auto p-6">
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="text-center text-gray-500">Loading resource...</div>
+
+  <!-- Resource Info -->
+  <div *ngIf="resource">
+    <!-- Title -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ resource.name }}</h1>
+
+    <!-- Info Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700 mb-6">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">Type:</span>
+        <span>{{ resource.type }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">Status:</span>
+        <span>{{ resource.status }}</span>
+      </div>
+      <div class="flex items-center gap-2" *ngIf="resource.quantityAvailable !== null && resource.quantityAvailable !== undefined">
+        <span class="font-semibold">Quantity Available:</span>
+        <span>{{ resource.quantityAvailable }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-semibold">Reservations:</span>
+        <span>{{ resource.resourceReservations.length }}</span>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-10" *ngIf="resource.description">
+      <h2 class="font-semibold text-gray-800">Description</h2>
+      <p class="text-gray-600 mt-1">{{ resource.description }}</p>
+    </div>
+
+    <!-- Reservations Section -->
+    <div class="mt-10">
+      <!-- Title and Filters Row -->
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-3">
+        <!-- Title -->
+        <h2 class="text-lg font-semibold text-gray-800">Reservations</h2>
+
+        <!-- Filters aligned to the right and slightly lower -->
+        <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:mt-2">
+          <!-- Start Date -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Start</label>
+            <input
+              type="date"
+              [(ngModel)]="startTimeModel"
+              class="border border-gray-300 rounded px-3 py-1 text-sm"
+            />
+          </div>
+
+          <!-- End Date -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">End</label>
+            <input
+              type="date"
+              [(ngModel)]="endTimeModel"
+              class="border border-gray-300 rounded px-3 py-1 text-sm"
+            />
+          </div>
+
+          <!-- Filter Button -->
+          <div>
+            <label class="block text-sm text-transparent mb-1">Filter</label>
+            <button
+              class="px-4 py-1.5 bg-primary text-white rounded text-sm"
+              (click)="applyDateFilter()"
+            >
+              Filter
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reservation List -->
+      <div *ngIf="!resource.resourceReservations.length" class="text-sm text-gray-500">
+        No reservations found for this resource.
+      </div>
+
+      <div *ngIf="resource.resourceReservations.length" class="divide-y divide-gray-200 border rounded-md bg-white">
+        <div
+          *ngFor="let reservation of resource.resourceReservations"
+          class="px-4 py-2 text-sm text-gray-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2"
+        >
+          <div class="flex flex-wrap gap-x-4">
+            <div>
+              <span class="font-medium text-gray-800">From:</span> {{ reservation.startTime | date: 'short' }}
+            </div>
+            <div>
+              <span class="font-medium text-gray-800">To:</span> {{ reservation.endTime | date: 'short' }}
+            </div>
+            <div *ngIf="reservation.quantity">
+              <span class="font-medium text-gray-800">Qty:</span> {{ reservation.quantity }}
+            </div>
+          </div>
+          <div class="text-gray-500 sm:text-right">
+            <span class="font-semibold">Reserved By:</span> {{ GetUserFullName(reservation.reservedBy) | async }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- Floating Actions -->
+<div class="fixed bottom-6 right-6 z-50 group">
+  <!-- Main FAB -->
+  <button class="bg-primary text-white rounded-full w-14 h-14 shadow-lg flex items-center justify-center text-2xl focus:outline-none group-hover:rotate-45 transition-transform">
+    +
+  </button>
+
+  <!-- Actions -->
+  <div class="flex flex-col items-end space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-16 right-0">
+
+    <!-- Reserve -->
+    <div class="flex items-center space-x-2">
+      <span *ngIf="userRole==UserRole.Researcher || userRole==UserRole.Manager" class="text-xs text-gray-600">Reserve</span>
+      <button (click)="openModal()" class="bg-green-500 hover:bg-green-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM12 17v-4m-2 2h4" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Edit -->
+    <div *ngIf="userRole==UserRole.ResourceManager" class="flex items-center space-x-2">
+      <span class="text-xs text-gray-600">Edit</span>
+      <button (click)="onUpdate(resource.id)" class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Delete -->
+    <div *ngIf="userRole==UserRole.ResourceManager" class="flex items-center space-x-2">
+      <span class="text-xs text-gray-600">Delete</span>
+      <button (click)="onDelete(resource.id)" class="bg-red-500 hover:bg-red-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

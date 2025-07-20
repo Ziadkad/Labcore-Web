@@ -1,0 +1,72 @@
+<div class="max-w-6xl mx-auto py-4 space-y-3">
+
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-900">My Reservations</h1>
+  </div>
+
+  <!-- Filters -->
+  <div class="md:p-2 flex flex-col md:flex-row gap-4 md:items-end">
+    <!-- Start Date -->
+    <div class="flex-1">
+      <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+      <input
+        type="date"
+        id="startTime"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary text-sm"
+        [ngModel]="startTime | date:'yyyy-MM-dd'"
+        (ngModelChange)="startTime = $event"
+      />
+    </div>
+
+    <!-- End Date -->
+    <div class="flex-1">
+      <label for="endTime" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+      <input
+        type="date"
+        id="endTime"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary text-sm"
+        [ngModel]="endTime | date:'yyyy-MM-dd'"
+        (ngModelChange)="endTime = $event"
+      />
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading()" class="text-center text-gray-500 text-sm">Loading reservations...</div>
+
+  <!-- No Results -->
+  <div *ngIf="!loading() && reservationList().length === 0" class="text-center text-gray-500 text-sm">
+    No reservations found for the selected period.
+  </div>
+
+  <!-- Reservation List -->
+  <div *ngIf="!loading() && reservationList().length > 0" class="divide-y divide-gray-200">
+    <div
+      *ngFor="let res of reservationList()"
+      class="py-3 px-5 flex items-center justify-between hover:bg-gray-50 transition"
+    >
+      <!-- Left Side: Info -->
+      <div class="text-sm text-gray-800 space-y-0.5">
+        <p class="font-medium">{{ res.resource.name }}</p>
+        <p class="text-gray-600">
+          {{ res.startTime | date:'short' }} → {{ res.endTime | date:'short' }}
+        </p>
+      </div>
+
+      <div class="flex">
+        <p class="text-gray-600 text-sm pr-3">
+          <span *ngIf="res.quantity != null && res.quantity != undefined && res.quantity != 0">Qte: {{ res.quantity }}</span>
+        </p>
+      <!-- Right Side: Delete Button -->
+      <button
+        class="text-red-600 text-sm hover:underline"
+        (click)="deleteReservation(res.id)"
+      >
+        Delete
+      </button>
+    </div>
+    </div>
+  </div>
+
+</div>

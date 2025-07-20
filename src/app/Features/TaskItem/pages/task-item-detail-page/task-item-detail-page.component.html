@@ -1,3 +1,20 @@
+<!-- Modal Overlay -->
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+  <!-- Modal Box -->
+  <div class="bg-gray-50 rounded-xl shadow-lg w-full max-w-md p-6 relative">
+
+    <!-- Close Button -->
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg">&times;</button>
+
+    <!-- Modal Title -->
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Create a Reservation</h3>
+
+    <!-- Embedded Reservation Form -->
+    <app-createreservation-for-task-item [taskItemId]="taskItemId" [startTime]="taskItem.startDate"  [endTime]="taskItem.endDate" (close)="closeModal()"></app-createreservation-for-task-item>
+
+  </div>
+</div>
+
 <div class="max-w-6xl mx-auto p-6">
 
   <!-- Loading State -->
@@ -51,7 +68,7 @@
     </div>
 
     <!-- Files Section -->
-    <div *ngIf="taskItem.pathsFiles?.length" class="mt-10">
+    <div *ngIf="taskItem.pathsFiles?.length" class="mt-10  w-11/12">
       <span class="font-semibold">Task Files</span>
       <div class="space-y-3 mt-4">
         <div *ngFor="let fileLink of taskItem.pathsFiles" class="flex items-center justify-between group px-2 py-1">
@@ -65,7 +82,7 @@
             <button (click)="downloadStudyFile(fileLink)"
                     class="text-sm text-primary hover:underline focus:outline-none flex items-center space-x-1">
               <i class="fa fa-download"></i>
-              <span>Download</span>
+              <span>View</span>
             </button>
             <button (click)="deleteProjectFile(fileLink)"
                     class="text-sm text-red-600 hover:underline focus:outline-none flex items-center space-x-1">
@@ -76,6 +93,46 @@
         </div>
       </div>
     </div>
+
+
+
+    <!-- Reservation -->
+    <div *ngIf="reservations.length" class="mt-10 w-11/12">
+      <span class="font-semibold">Task Reservation</span>
+      <div class="space-y-3 mt-4">
+        <div *ngFor="let reservation of reservations" class="flex justify-between items-center px-2 py-2 group">
+
+          <!-- Left section: icon + resource name + time -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+            <div class="flex items-center space-x-2 mb-1 sm:mb-0">
+              <i class="fa fa-file-alt text-gray-500 "></i>
+              <span class="text-gray-700 font-medium ">
+            {{ reservation.resource.name }}
+          </span>
+            </div>
+            <div class="text-sm text-gray-500">
+              {{ reservation.startTime | date:'short' }} → {{ reservation.endTime | date:'short' }}
+            </div>
+          </div>
+
+          <!-- Right section: quantity + delete -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-sm text-gray-700">
+            <div *ngIf="reservation.quantity !== null && reservation.quantity !== undefined && reservation.quantity !== 0">
+              <span>Qty: {{ reservation.quantity }}</span>
+            </div>
+            <button *ngIf="reservation.reservedBy == userId" (click)="deleteReservation(reservation.id)"
+                    class="text-red-600 hover:underline focus:outline-none flex items-center space-x-1 mt-1 sm:mt-0">
+              <i class="fa fa-trash"></i>
+              <span>Delete</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
 
   </div>
 
@@ -99,6 +156,17 @@
              stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+      </button>
+    </div>
+
+
+    <!-- Reserve -->
+    <div class="flex items-center space-x-2">
+      <span *ngIf="isAllowedToEdit()" class="text-xs text-gray-600">Reserve</span>
+      <button (click)="openModal()" class="bg-green-500 hover:bg-green-600 text-white rounded-full w-12 h-12 shadow flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM12 17v-4m-2 2h4" />
         </svg>
       </button>
     </div>

@@ -1,0 +1,87 @@
+<form [formGroup]="reservationForm" (ngSubmit)="createReservation()" class="max-w-4xl mx-auto px-4 py-2">
+
+  <!-- Hidden Resource ID -->
+  <input type="hidden" formControlName="resourceId" />
+
+  <!-- Form Grid -->
+  <div class="sm:grid sm:grid-cols-2 sm:gap-4">
+
+    <!-- Start Time -->
+    <div class="mb-4">
+      <label for="startTime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Start Time
+      </label>
+      <input
+        type="datetime-local"
+        id="startTime"
+        formControlName="startTime"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+    </div>
+
+    <!-- End Time -->
+    <div class="mb-4">
+      <label for="endTime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        End Time
+      </label>
+      <input
+        type="datetime-local"
+        id="endTime"
+        formControlName="endTime"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <div *ngIf="reservationForm.hasError('startAfterEnd') && reservationForm.get('endTime')?.touched" class="text-red-600 text-sm mt-1">
+        Start time must be before end time.
+      </div>
+    </div>
+
+    <!-- Quantity -->
+    <div *ngIf="resource.type == ResourceType.Consumable" class="mb-4 sm:col-span-2">
+      <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Quantity (optional)
+      </label>
+      <input
+        type="number"
+        id="quantity"
+        formControlName="quantity"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="Enter quantity"
+      />
+      <div *ngIf="reservationForm.get('quantity')?.touched && reservationForm.get('quantity')?.errors?.['quantityInvalid']" class="text-red-600 text-sm mt-1">
+        Quantity must be greater than 0 if specified.
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="mb-4 sm:col-span-2">
+      <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Notes
+      </label>
+      <textarea
+        id="notes"
+        formControlName="notes"
+        rows="3"
+        class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="Additional notes (optional)"
+      ></textarea>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:space-x-4">
+    <button
+      type="submit"
+      class="w-full sm:w-auto bg-primary hover:bg-secondary text-white font-medium py-2 px-6 rounded-md transition duration-300 mb-2 sm:mb-0"
+    >
+      Create Reservation
+    </button>
+
+    <button
+      type="button"
+      class="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-6 rounded-md transition duration-300"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+  </div>
+</form>

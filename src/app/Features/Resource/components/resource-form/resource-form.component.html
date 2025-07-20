@@ -1,0 +1,107 @@
+<form [formGroup]="resourceForm" (ngSubmit)="onSubmitForm()" class="max-w-2xl mx-auto">
+
+  <!-- Resource Name -->
+  <div class="mb-6">
+    <label for="name" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Resource Name
+    </label>
+    <input
+      type="text"
+      id="name"
+      formControlName="name"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter resource name"
+    />
+    <div *ngIf="submitted && resourceForm.get('name')?.invalid" class="text-red-600 text-sm mt-1">
+      Name is required.
+    </div>
+  </div>
+
+  <!-- Resource Type -->
+  <div class="mb-6">
+    <label for="type" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Resource Type
+    </label>
+    <select
+      id="type"
+      formControlName="type"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+    >
+      <option [ngValue]="null" disabled selected>Select resource type</option>
+      <option *ngFor="let type of resourceTypeOption" [ngValue]="type">
+        {{ type }}
+      </option>
+    </select>
+    <div *ngIf="submitted && resourceForm.get('type')?.invalid" class="text-red-600 text-sm mt-1">
+      Type is required.
+    </div>
+  </div>
+
+  <!-- Quantity Available -->
+  <div class="mb-6" *ngIf="showQuantityField">
+    <label for="quantityAvailable" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Quantity Available
+    </label>
+    <input
+      type="number"
+      id="quantityAvailable"
+      formControlName="quantityAvailable"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="e.g., 5"
+      min="0"
+    />
+  </div>
+
+
+  <!-- Description -->
+  <div class="mb-6">
+    <label for="description" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Description (Optional)
+    </label>
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="3"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Enter description"
+    ></textarea>
+  </div>
+
+
+  <!-- Status -->
+  <div class="mb-6">
+    <label for="status" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+      Status
+    </label>
+    <select
+      id="status"
+      formControlName="status"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+    >
+      <option [ngValue]="null" disabled selected>Select status</option>
+      <option *ngFor="let status of resourceStatusOption" [ngValue]="status">
+        {{ status }}
+      </option>
+    </select>
+    <div *ngIf="submitted && resourceForm.get('status')?.invalid" class="text-red-600 text-sm mt-1">
+      Status is required.
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <button
+    type="submit"
+    class="w-full bg-accent hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition duration-300 mb-4"
+  >
+    {{ isAdd ? 'Create Resource' : 'Update Resource' }}
+  </button>
+
+  <!-- Cancel Button -->
+  <button
+    type="button"
+    (click)="cancel()"
+    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-4 rounded-lg transition duration-300"
+  >
+    Cancel
+  </button>
+</form>

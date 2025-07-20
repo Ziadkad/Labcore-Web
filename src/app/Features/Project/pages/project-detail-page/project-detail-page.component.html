@@ -35,7 +35,7 @@
 
 
     <!-- File Downloads -->
-    <div *ngIf="project.pathsFiles?.length" class="mt-10">
+    <div *ngIf="project.pathsFiles?.length" class="mt-10 w-11/12">
       <span class="font-semibold">Project Files</span>
       <div class="space-y-3 mt-4">
         <div *ngFor="let fileLink of project.pathsFiles" class="flex items-center justify-between group px-2 py-1">
@@ -49,7 +49,7 @@
             <button (click)="downloadProjectFile(fileLink)"
                     class="text-sm text-primary hover:underline focus:outline-none flex items-center space-x-1">
               <i class="fa fa-download"></i>
-              <span>Download</span>
+              <span>View</span>
             </button>
             <button *ngIf="userRole == UserRole.Manager && userId == project.managerId" (click)="deleteProjectFile(fileLink)"
                     class="text-sm text-red-600 hover:underline focus:outline-none flex items-center space-x-1">
@@ -63,7 +63,7 @@
 
 
     <!-- Studies Section -->
-    <div *ngIf="project.studies?.length" class="mt-10">
+    <div *ngIf="project.studies?.length" class="mt-10 w-11/12">
       <span class="font-semibold">Associated Studies</span>
       <div class="space-y-4 mt-4">
         <div *ngFor="let study of project.studies">

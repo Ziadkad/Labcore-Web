@@ -53,4 +53,9 @@ export class UserService {
     return this.http.get<PageQueryResult<User>>(this.baseUrl, { params });
   }
 
+
+
+  giveRole(command: { userId: Guid; role: UserRole }): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/GiveRole`, command);
+  }
 }

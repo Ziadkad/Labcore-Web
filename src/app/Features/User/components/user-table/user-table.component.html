@@ -1,0 +1,42 @@
+<div class="overflow-x-auto rounded-xl shadow bg-white">
+  <div class="rounded-xl overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-primary text-white">
+      <tr>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Name</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Email</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Gender</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Role</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+      <tr *ngFor="let user of users" class="hover:bg-gray-50">
+        <td class="px-6 py-3 text-sm text-gray-900 font-medium">
+          {{ user.firstName }} {{ user.lastName }}
+        </td>
+        <td class="px-6 py-3 text-sm text-gray-700">
+          {{ user.email }}
+        </td>
+        <td class="px-6 py-3 text-sm text-gray-600">
+          {{ Gender[user.gender] }}
+        </td>
+        <td class="px-6 py-3 text-sm text-gray-600">
+          <select
+            class="bg-[#fff] border border-gray-300 text-sm rounded px-2 py-1"
+            [ngModel]="user.role"
+            (ngModelChange)="onRoleChange($event, user.id)">
+            <option *ngFor="let role of userRoles" [ngValue]="role.value">
+              {{ role.label }}
+            </option>
+          </select>
+        </td>
+
+      </tr>
+
+      <tr *ngIf="users.length === 0">
+        <td colspan="8" class="text-center py-4 text-gray-500">No users found.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

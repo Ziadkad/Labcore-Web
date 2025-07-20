@@ -11,7 +11,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
       const backendMessage = error.error?.message;
       const backendErrors: string[] = error.error?.errors || [];
-      const time: number = 3000;
+      const time: number = 4000;
 
       switch (error.status) {
         case 400:
