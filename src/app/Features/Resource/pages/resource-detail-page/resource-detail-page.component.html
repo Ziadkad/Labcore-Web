@@ -100,7 +100,7 @@
         No reservations found for this resource.
       </div>
 
-      <div *ngIf="resource.resourceReservations.length" class="divide-y divide-gray-200 border rounded-md bg-white">
+      <div *ngIf="resource.resourceReservations.length" class="divide-y divide-gray-200 border rounded-md bg-white ">
         <div
           *ngFor="let reservation of resource.resourceReservations"
           class="px-4 py-2 text-sm text-gray-700 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2"
@@ -116,7 +116,7 @@
               <span class="font-medium text-gray-800">Qty:</span> {{ reservation.quantity }}
             </div>
           </div>
-          <div class="text-gray-500 sm:text-right">
+          <div class="text-gray-500 sm:text-right ">
             <span class="font-semibold">Reserved By:</span> {{ GetUserFullName(reservation.reservedBy) | async }}
           </div>
         </div>

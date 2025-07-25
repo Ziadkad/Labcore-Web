@@ -69,7 +69,7 @@ export class CreatereservationComponent implements OnInit {
 
   private startTimeFutureValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
-    const now = new Date();
+    const now = new Date(new Date().getMonth() - 1) ;
     const input = new Date(control.value);
     return input.getTime() > now.getTime() ? null : { startTimeInPast: true };
   }

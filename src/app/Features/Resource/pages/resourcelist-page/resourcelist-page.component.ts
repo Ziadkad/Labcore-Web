@@ -59,7 +59,12 @@ export class ResourcelistPageComponent {
       params.status,
       params.pageQuery).subscribe({
       next: result => {
-        this.resourceList.set(result.items);
+        const items = result.items.map((item: Resource) => ({
+          ...item,
+          type : this.mapTypeNumberToEnum(parseInt(item.type)),
+          status: this.mapStatusNumberToEnum(parseInt(item.status)),
+        }));
+        this.resourceList.set(items);
         this.getTotalPage(result.totalCount);
         this.loading.set(false);
       },
@@ -120,6 +125,24 @@ export class ResourcelistPageComponent {
   }
 
 
+  mapStatusNumberToEnum(value: number): ResourceStatus {
+    const map: { [key: number]: ResourceStatus } = {
+      0: ResourceStatus.Available,
+      2: ResourceStatus.Unavailable,
+      1: ResourceStatus.UnderMaintenance,
+    };
+    return map[value];
+  }
+
+  mapTypeNumberToEnum(value: number): ResourceType {
+    const map: { [key: number]: ResourceType } = {
+      0: ResourceType.Consumable,
+      1: ResourceType.Room,
+      2: ResourceType.Tool,
+      3: ResourceType.Other
+    };
+    return map[value];
+  }
   protected readonly ResourceStatus = ResourceStatus;
   protected readonly ResourceType = ResourceType;
   protected readonly UserRole = UserRole;

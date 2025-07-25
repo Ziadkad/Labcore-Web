@@ -32,7 +32,7 @@ export class ProjectListPageComponent implements OnInit{
   tags = signal<string[]>([]);
   researchers = signal<Guid[]>([]);
   manager = signal<Guid | null>(null);
-  pageQuery = signal<PageQueryRequest>({ page: 1, pageSize: 12 });
+  pageQuery = signal<PageQueryRequest>({ page: 1, pageSize: 9 });
 
   pageCount! : number;
 

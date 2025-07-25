@@ -28,5 +28,11 @@ export class ProjectCardComponent {
       this.router.navigate(['/project', projectId]);
   }
 
+  getShortDescription(description: string): string {
+    const firstPart = description.split(/(?:\r?\n|\<br\s*\/?\>)/)[0]; // handles \n or <br>
+    const stopIndex = firstPart.indexOf("Client Information");
+    return stopIndex !== -1 ? firstPart.substring(0, stopIndex).trim() : firstPart.trim();
+  }
+
   protected readonly parseInt = parseInt;
 }

@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../../Core/Services/auth-service/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
+import { UserRole } from '../../../../Shared/Interfaces/Auth/user-role';
 
 @Component({
   selector: 'app-login-form',
@@ -45,7 +46,16 @@ export class LoginFormComponent implements OnInit {
         } else {
           this.toastr.success(`Welcome ${res.firstName}!`, 'Login Successful',{ timeOut: 2000 });
           console.log('Login successful', res);
-          this.router.navigate(['']);
+          if(res.role === UserRole.Admin) {
+            this.router.navigate(['users']);
+          }
+          else if(res.role === UserRole.ResourceManager) {
+            this.router.navigate(['resources']);
+          }
+          else {
+            this.router.navigate(['']);
+          }
+
         }
       },
       error: (err) => {

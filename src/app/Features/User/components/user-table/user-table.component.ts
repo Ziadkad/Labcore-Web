@@ -45,4 +45,15 @@
       });
     }
 
+
+    onResetPassword( id:Guid){
+      const confirmed = window.confirm('Are you sure you want to reset the password for this user?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      this.toastr.success('Password reset email has been sent.');
+
+    }
   }

@@ -57,6 +57,8 @@ import { CreatereservationForTaskItemComponent } from './Features/ResourceReserv
 import { MyReservationPageComponent } from './Features/ResourceReservation/pages/my-reservation-page/my-reservation-page.component';
 import { UserListComponent } from './Features/User/pages/user-list/user-list.component';
 import { UserTableComponent } from './Features/User/components/user-table/user-table.component';
+import { ResearchDashboardComponent } from './Features/Dashboard/components/research-dashboard/research-dashboard.component';
+import { ManagerDashboardComponent } from './Features/Dashboard/components/manager-dashboard/manager-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +101,8 @@ import { UserTableComponent } from './Features/User/components/user-table/user-t
     MyReservationPageComponent,
     UserListComponent,
     UserTableComponent,
+    ResearchDashboardComponent,
+    ManagerDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,6 +120,7 @@ import { UserTableComponent } from './Features/User/components/user-table/user-t
     NgSelectModule,
     ScheduleModule,
     RecurrenceEditorModule,
+
   ],
   providers:  [appConfig,
     DayService,

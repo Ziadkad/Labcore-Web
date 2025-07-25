@@ -9,17 +9,20 @@
       [items]="listResources"
       bindLabel="name"
       bindValue="id"
-      placeholder="Select a resource"
+      placeholder=""
       [searchable]="true"
       formControlName="resourceId"
       [clearable]="true"
       class="w-full"
       [ngClass]="{
-        'border bg-[#fff] p-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:outline-none': true,
-        'ng-invalid ng-touched': reservationForm.get('resourceId')?.touched && reservationForm.get('resourceId')?.invalid
-      }"
+    'border bg-[#fff] p-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:outline-none': true,
+    'ng-invalid ng-touched': reservationForm.get('resourceId')?.touched && reservationForm.get('resourceId')?.invalid
+  }"
     >
     </ng-select>
+
+
+
 
     <div *ngIf="reservationForm.get('resourceId')?.touched && reservationForm.get('resourceId')?.invalid" class="text-red-600 text-sm mt-1">
       Resource is required.
@@ -63,9 +66,9 @@
     </div>
 
     <!-- Quantity (only for Consumable resources) -->
-    <div *ngIf="type == ResourceType.Consumable" class="mb-4 sm:col-span-2">
+    <div class="mb-4 sm:col-span-2">
       <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-        Quantity
+        Quantity (Only if the resource is Consumable)
       </label>
       <input
         type="number"

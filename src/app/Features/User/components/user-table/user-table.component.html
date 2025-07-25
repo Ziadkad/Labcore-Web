@@ -7,6 +7,7 @@
         <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Email</th>
         <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Gender</th>
         <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider">Role</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold tracking-wider"></th>
       </tr>
       </thead>
       <tbody class="divide-y divide-gray-100">
@@ -30,7 +31,13 @@
             </option>
           </select>
         </td>
-
+        <td class="px-6 py-3">
+          <button
+            class="bg-accent hover:bg-primary text-sm text-white font-semibold py-1 px-3 rounded"
+            (click)="onResetPassword(user.id)">
+            Reset Password
+          </button>
+        </td>
       </tr>
 
       <tr *ngIf="users.length === 0">

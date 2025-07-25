@@ -1,0 +1,13 @@
+::ng-deep ng-select .ng-dropdown-panel .ng-option {
+  background-color: #fff;
+  padding: 0.5rem 0.75rem; /* Equivalent to Tailwind's px-3 py-2 */
+  border-bottom: 1px solid #e0f2ff;
+  transition: background-color 0.2s ease;
+}
+
+::ng-deep ng-select .ng-option-selected,
+::ng-deep ng-select .ng-option:hover {
+  background-color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
